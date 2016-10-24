@@ -27,4 +27,9 @@ func TestBase58RoundTrip(t *testing.T) {
 	if !bytes.Equal(buf, out) {
 		t.Fatal("input wasnt the same as output", buf, out)
 	}
+
+	_, _, err = Decode("")
+	if err == nil {
+		t.Fatal("shouldnt be able to decode empty string")
+	}
 }

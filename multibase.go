@@ -31,6 +31,10 @@ func Encode(base int, data []byte) (string, error) {
 }
 
 func Decode(data string) (int, []byte, error) {
+	if len(data) == 0 {
+		return 0, nil, fmt.Errorf("cannot decode multibase for zero length string")
+	}
+
 	switch data[0] {
 	case Base58BTC:
 		return Base58BTC, b58.DecodeAlphabet(data[1:], b58.BTCAlphabet), nil
