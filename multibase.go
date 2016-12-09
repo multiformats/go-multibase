@@ -21,6 +21,7 @@ const (
 	Base58BTC    = 'z'
 	Base64       = 'y'
 	Base64url    = 'Y'
+	Binary       = 'b' // 'B'
 )
 
 var ErrUnsupportedEncoding = fmt.Errorf("selected encoding not supported")
@@ -41,6 +42,8 @@ func Encode(base int, data []byte) (string, error) {
 		return string(Base64) + base64.StdEncoding.EncodeToString(data), nil
 	case Base64url:
 		return string(Base64url) + base64.URLEncoding.EncodeToString(data), nil
+	case Binary, 'B':
+		return string(Binary) + string(data), nil
 	default:
 		return "", ErrUnsupportedEncoding
 	}
@@ -71,8 +74,9 @@ func Decode(data string) (int, []byte, error) {
 	case Base64url:
 		bytes, err := base64.URLEncoding.DecodeString(data[1:])
 		return Base64url, bytes, err
+	case Binary, 'B':
+		return Binary, []byte(data[1:]), nil
 	default:
 		return -1, nil, ErrUnsupportedEncoding
 	}
 }
-
