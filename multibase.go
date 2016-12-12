@@ -10,6 +10,7 @@ import (
 )
 
 const (
+	Identity          = 0x00
 	Base1             = '1'
 	Base2             = '0'
 	Base8             = '7'
@@ -30,13 +31,14 @@ const (
 	Base64url         = 'u'
 	Base64pad         = 'M'
 	Base64urlPad      = 'U'
-	Binary       = 'X'
 )
 
 var ErrUnsupportedEncoding = fmt.Errorf("selected encoding not supported")
 
 func Encode(base int, data []byte) (string, error) {
 	switch base {
+	case Identity:
+		return string(Identity) + string(data), nil
 	case Base16, Base16Upper:
 		return string(Base16) + hex.EncodeToString(data), nil
 	case Base32, Base32Upper:
@@ -55,8 +57,6 @@ func Encode(base int, data []byte) (string, error) {
 		return string(Base64pad) + base64.StdEncoding.EncodeToString(data), nil
 	case Base64urlPad:
 		return string(Base64urlPad) + base64.URLEncoding.EncodeToString(data), nil
-	case Binary:
-		return string(Binary) + string(data), nil
 	default:
 		return "", ErrUnsupportedEncoding
 	}
@@ -68,6 +68,8 @@ func Decode(data string) (int, []byte, error) {
 	}
 
 	switch data[0] {
+	case Identity:
+		return Identity, []byte(data[1:]), nil
 	case Base16, Base16Upper:
 		bytes, err := hex.DecodeString(data[1:])
 		return Base16, bytes, err
@@ -93,8 +95,6 @@ func Decode(data string) (int, []byte, error) {
 	case Base64urlPad:
 		bytes, err := base64.URLEncoding.DecodeString(data[1:])
 		return Base64urlPad, bytes, err
-	case Binary:
-		return Binary, []byte(data[1:]), nil
 	default:
 		return -1, nil, ErrUnsupportedEncoding
 	}
