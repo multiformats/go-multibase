@@ -4,7 +4,47 @@ import (
 	"bytes"
 	"math/rand"
 	"testing"
+	"fmt"
+
+	"github.com/stretchr/testify/assert"
 )
+
+var sampleBytes = []byte("Decentralize everything!!")
+var encodedSamples = map[int]string{
+	Identity: string(0x00) + "Decentralize everything!!",
+	Base64pad: "MRGVjZW50cmFsaXplIGV2ZXJ5dGhpbmchIQ==",
+}
+
+func testEncode(t *testing.T, encoding int, bytes []byte, expected string)  {
+	actual, err := Encode(encoding, bytes)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	assert.Equal(t, expected, actual, fmt.Sprintf("Encoding failure for encoding %c (%d)", encoding, encoding))
+}
+
+func testDecode(t *testing.T, expectedEncoding int, expectedBytes []byte, data string)  {
+	actualEncoding, actualBytes, err := Decode(data)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	assert.Equal(t, expectedEncoding, actualEncoding)
+	assert.Equal(t, expectedBytes, actualBytes, fmt.Sprintf("Encoding failure for encoding %c (%d)", expectedEncoding, expectedEncoding))
+}
+
+func TestEncode(t *testing.T)  {
+	for encoding, data := range encodedSamples {
+		testEncode(t, encoding, sampleBytes, data)
+	}
+}
+
+func TestDecode(t *testing.T)  {
+	for encoding, data := range encodedSamples {
+		testDecode(t, encoding, sampleBytes, data)
+	}
+}
 
 func TestRoundTrip(t *testing.T) {
 	buf := make([]byte, 17)
