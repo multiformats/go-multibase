@@ -1,8 +1,8 @@
 package multibase
 
 import (
-	"encoding/hex"
 	"encoding/base64"
+	"encoding/hex"
 	"fmt"
 
 	b58 "github.com/jbenet/go-base58"

@@ -1,8 +1,8 @@
 package multibase
 
 import (
-	"reflect"
 	"fmt"
+	"reflect"
 	"testing"
 )
 
