@@ -4,9 +4,6 @@ import (
 	"bytes"
 	"math/rand"
 	"testing"
-	"fmt"
-
-	"github.com/stretchr/testify/assert"
 )
 
 var sampleBytes = []byte("Decentralize everything!!")
@@ -21,7 +18,7 @@ func testEncode(t *testing.T, encoding int, bytes []byte, expected string)  {
 		t.Error(err)
 		return
 	}
-	assert.Equal(t, expected, actual, fmt.Sprintf("Encoding failure for encoding %c (%d)", encoding, encoding))
+	assertEqual(t, expected, actual, "Encoding failure for encoding %c (%d)", encoding, encoding)
 }
 
 func testDecode(t *testing.T, expectedEncoding int, expectedBytes []byte, data string)  {
@@ -30,8 +27,8 @@ func testDecode(t *testing.T, expectedEncoding int, expectedBytes []byte, data s
 		t.Error(err)
 		return
 	}
-	assert.Equal(t, expectedEncoding, actualEncoding)
-	assert.Equal(t, expectedBytes, actualBytes, fmt.Sprintf("Encoding failure for encoding %c (%d)", expectedEncoding, expectedEncoding))
+	assertEqual(t, expectedEncoding, actualEncoding)
+	assertEqual(t, expectedBytes, actualBytes, "Encoding failure for encoding %c (%d)", expectedEncoding, expectedEncoding)
 }
 
 func TestEncode(t *testing.T)  {
