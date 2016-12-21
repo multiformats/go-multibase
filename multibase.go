@@ -1,13 +1,15 @@
 package multibase
 
 import (
-	"encoding/hex"
 	"encoding/base64"
+	"encoding/hex"
 	"fmt"
 
 	b58 "github.com/jbenet/go-base58"
 	b32 "github.com/whyrusleeping/base32"
 )
+
+type Encoding int
 
 const (
 	Base1             = '1'
@@ -34,7 +36,7 @@ const (
 
 var ErrUnsupportedEncoding = fmt.Errorf("selected encoding not supported")
 
-func Encode(base int, data []byte) (string, error) {
+func Encode(base Encoding, data []byte) (string, error) {
 	switch base {
 	case Base16, Base16Upper:
 		return string(Base16) + hex.EncodeToString(data), nil
@@ -59,7 +61,7 @@ func Encode(base int, data []byte) (string, error) {
 	}
 }
 
-func Decode(data string) (int, []byte, error) {
+func Decode(data string) (Encoding, []byte, error) {
 	if len(data) == 0 {
 		return 0, nil, fmt.Errorf("cannot decode multibase for zero length string")
 	}
@@ -94,4 +96,3 @@ func Decode(data string) (int, []byte, error) {
 		return -1, nil, ErrUnsupportedEncoding
 	}
 }
-

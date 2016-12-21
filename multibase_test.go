@@ -10,7 +10,7 @@ func TestRoundTrip(t *testing.T) {
 	buf := make([]byte, 16)
 	rand.Read(buf)
 
-	baseList := []int{ Base16, Base32, Base32hex, Base32pad, Base32hexPad, Base58BTC, Base58Flickr, Base64pad, Base64urlPad }
+	baseList := []Encoding{Base16, Base32, Base32hex, Base32pad, Base32hexPad, Base58BTC, Base58Flickr, Base64pad, Base64urlPad}
 
 	for _, base := range baseList {
 		enc, err := Encode(base, buf)
