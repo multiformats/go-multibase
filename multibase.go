@@ -1,15 +1,18 @@
 package multibase
 
 import (
-	"encoding/hex"
 	"encoding/base64"
+	"encoding/hex"
 	"fmt"
 
 	b58 "github.com/jbenet/go-base58"
 	b32 "github.com/whyrusleeping/base32"
 )
 
+type Encoding int
+
 const (
+	Identity          = 0x00
 	Base1             = '1'
 	Base2             = '0'
 	Base8             = '7'
@@ -34,8 +37,11 @@ const (
 
 var ErrUnsupportedEncoding = fmt.Errorf("selected encoding not supported")
 
-func Encode(base int, data []byte) (string, error) {
+func Encode(base Encoding, data []byte) (string, error) {
 	switch base {
+	case Identity:
+		// 0x00 inside a string is OK in golang and causes no problems with the length calculation.
+		return string(Identity) + string(data), nil
 	case Base16, Base16Upper:
 		return string(Base16) + hex.EncodeToString(data), nil
 	case Base32, Base32Upper:
@@ -59,12 +65,14 @@ func Encode(base int, data []byte) (string, error) {
 	}
 }
 
-func Decode(data string) (int, []byte, error) {
+func Decode(data string) (Encoding, []byte, error) {
 	if len(data) == 0 {
 		return 0, nil, fmt.Errorf("cannot decode multibase for zero length string")
 	}
 
 	switch data[0] {
+	case Identity:
+		return Identity, []byte(data[1:]), nil
 	case Base16, Base16Upper:
 		bytes, err := hex.DecodeString(data[1:])
 		return Base16, bytes, err
@@ -94,4 +102,3 @@ func Decode(data string) (int, []byte, error) {
 		return -1, nil, ErrUnsupportedEncoding
 	}
 }
-
