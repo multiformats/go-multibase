@@ -1,9 +1,13 @@
 # go-multibase
 
 [![](https://img.shields.io/badge/made%20by-Protocol%20Labs-blue.svg?style=flat-square)](http://ipn.io)
-[![](https://img.shields.io/badge/freenode-%23ipfs-blue.svg?style=flat-square)](http://webchat.freenode.net/?channels=%23ipfs)
+[![](https://img.shields.io/badge/project-multiformats-blue.svg?style=flat-square)](https://github.com/multiformats/multiformats)
+[![](https://img.shields.io/badge/freenode-%23ipfs-blue.svg?style=flat-square)](https://webchat.freenode.net/?channels=%23ipfs)
+[![](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
+[![Travis CI](https://img.shields.io/travis/multiformats/go-multibase.svg?style=flat-square&branch=master)](https://travis-ci.org/multiformats/go-multibase)
+[![codecov.io](https://img.shields.io/codecov/c/github/multiformats/go-multibase.svg?style=flat-square&branch=master)](https://codecov.io/github/multiformats/go-multibase?branch=master)
 
-> Go implementation of the [multibase](https://github.com/multiformats/multibase) specification.
+> Implementation of [multibase](https://github.com/multiformats/multibase) parser in go
 
 ## Install
 
@@ -15,7 +19,7 @@ go get github.com/multiformats/go-multibase
 
 TODO
 
-## Maintainer
+## Maintainers
 
 Captain: [@whyrusleeping](https://github.com/whyrusleeping).
 
@@ -29,4 +33,4 @@ Small note: If editing the README, please conform to the [standard-readme](https
 
 ## License
 
-[MIT](LICENSE) © Protocol Labs Inc.
+[MIT](LICENSE) © 2016 Protocol Labs Inc.
