@@ -14,7 +14,7 @@ install:
 
 script:
     - gx-go rewrite
-    - go test -race -coverprofile=unittest.coverprofile -covermode=atomic ./...
+    - go test -race -coverprofile=unittest.coverprofile -covermode=atomic .
 
 
 after_success:
