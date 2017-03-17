@@ -7,17 +7,34 @@
 [![Travis CI](https://img.shields.io/travis/multiformats/go-multibase.svg?style=flat-square&branch=master)](https://travis-ci.org/multiformats/go-multibase)
 [![codecov.io](https://img.shields.io/codecov/c/github/multiformats/go-multibase.svg?style=flat-square&branch=master)](https://codecov.io/github/multiformats/go-multibase?branch=master)
 
-> Implementation of [multibase](https://github.com/multiformats/multibase) parser in go
+> Implementation of [multibase](https://github.com/multiformats/multibase) -self identifying base encodings- in Go.
+
 
 ## Install
+
+`go-multibase` is a standard Go module which can be installed with:
 
 ```sh
 go get github.com/multiformats/go-multibase
 ```
 
+Note that `go-multibase` is packaged with Gx, so it is recommended to use Gx to install and use it (see Usage section).
+
 ## Usage
 
-TODO
+This module is packaged with [Gx](https://github.com/whyrusleeping/gx). In order to use it in your own project it is recommended that you:
+
+```sh
+go get -u github.com/whyrusleeping/gx
+go get -u github.com/whyrusleeping/gx-go
+cd <your-project-repository>
+gx init
+gx import github.com/multiformats/go-multibase
+gx install --global
+gx-go --rewrite
+```
+
+Please check [Gx](https://github.com/whyrusleeping/gx) and [Gx-go](https://github.com/whyrusleeping/gx-go) documentation for more information.
 
 ## Maintainers
 
