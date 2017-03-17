@@ -9,23 +9,30 @@ import (
 
 func main() {
 	if len(os.Args) < 3 {
-		fmt.Printf("usage: %s NEW-BASE CID...\n", os.Args[0])
+		fmt.Printf("usage: %s <new-base> <multibase-str>...\n", os.Args[0])
 		os.Exit(1)
 	}
 
-	newBase := os.Args[1]
-	cids := os.Args[2:]
+	var newBase multibase.Encoding
+	if baseParm := os.Args[1]; len(baseParm) != 0 {
+		newBase = multibase.Encoding(baseParm[0])
+	} else {
+		fmt.Fprintln(os.Stderr, "<new-base> is empty")
+		os.Exit(1)
+	}
 
-	for _, cid := range cids {
-		_, data, err := multibase.Decode(cid)
+	input := os.Args[2:]
+
+	for _, strmbase := range input {
+		_, data, err := multibase.Decode(strmbase)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%v\n", err)
+			fmt.Fprintf(os.Stderr, "error while decoding: %s\n", err)
 			os.Exit(1)
 		}
 
-		newCid, err := multibase.Encode(multibase.Encoding(newBase[0]), data)
+		newCid, err := multibase.Encode(newBase, data)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%v\n", err)
+			fmt.Fprintf(os.Stderr, "error while encoding: %s\n", err)
 			os.Exit(1)
 		}
 		fmt.Println(newCid)
