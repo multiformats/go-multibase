@@ -9,8 +9,10 @@ import (
 	b32 "github.com/whyrusleeping/base32"
 )
 
+// Encoding identifies the type of base-encoding that a multibase is carrying.
 type Encoding int
 
+// These are the supported encodings
 const (
 	Identity          = 0x00
 	Base1             = '1'
@@ -35,8 +37,13 @@ const (
 	Base64urlPad      = 'U'
 )
 
+// ErrUnsupportedEncoding is returned when the selected encoding is not known or
+// implemented.
 var ErrUnsupportedEncoding = fmt.Errorf("selected encoding not supported")
 
+// Encode encodes a given byte slice with the selected encoding and returns a
+// multibase string (<encoding><base-encoded-string>). It will return
+// an error if the selected base is not known.
 func Encode(base Encoding, data []byte) (string, error) {
 	switch base {
 	case Identity:
@@ -65,6 +72,8 @@ func Encode(base Encoding, data []byte) (string, error) {
 	}
 }
 
+// Decode takes a multibase string and decodes into a bytes buffer.
+// It will return an error if the selected base is not known.
 func Decode(data string) (Encoding, []byte, error) {
 	if len(data) == 0 {
 		return 0, nil, fmt.Errorf("cannot decode multibase for zero length string")
