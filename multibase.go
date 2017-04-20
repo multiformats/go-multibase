@@ -67,6 +67,10 @@ func Encode(base Encoding, data []byte) (string, error) {
 		return string(Base64pad) + base64.StdEncoding.EncodeToString(data), nil
 	case Base64urlPad:
 		return string(Base64urlPad) + base64.URLEncoding.EncodeToString(data), nil
+	case Base64url:
+		return string(Base64url) + base64.RawURLEncoding.EncodeToString(data), nil
+	case Base64:
+		return string(Base64) + base64.RawStdEncoding.EncodeToString(data), nil
 	default:
 		return "", ErrUnsupportedEncoding
 	}
@@ -107,6 +111,12 @@ func Decode(data string) (Encoding, []byte, error) {
 	case Base64urlPad:
 		bytes, err := base64.URLEncoding.DecodeString(data[1:])
 		return Base64urlPad, bytes, err
+	case Base64:
+		bytes, err := base64.RawStdEncoding.DecodeString(data[1:])
+		return Base64, bytes, err
+	case Base64url:
+		bytes, err := base64.RawURLEncoding.DecodeString(data[1:])
+		return Base64url, bytes, err
 	default:
 		return -1, nil, ErrUnsupportedEncoding
 	}
