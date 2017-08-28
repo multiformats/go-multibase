@@ -8,11 +8,19 @@ import (
 
 var sampleBytes = []byte("Decentralize everything!!")
 var encodedSamples = map[Encoding]string{
-	Identity:     string(0x00) + "Decentralize everything!!",
-	Base16:       "f446563656e7472616c697a652065766572797468696e672121",
-	Base58BTC:    "zUXE7GvtEk8XTXs1GF8HSGbVA9FCX9SEBPe",
-	Base64pad:    "MRGVjZW50cmFsaXplIGV2ZXJ5dGhpbmchIQ==",
-	Base64urlPad: "URGVjZW50cmFsaXplIGV2ZXJ5dGhpbmchIQ==",
+	Identity:          string(0x00) + "Decentralize everything!!",
+	Base16:            "f446563656e7472616c697a652065766572797468696e672121",
+	Base32:            "birswgzloorzgc3djpjssazlwmvzhs5dinfxgoijb",
+	Base32Upper:       "BIRSWGZLOORZGC3DJPJSSAZLWMVZHS5DINFXGOIJB",
+	Base32pad:         "cirswgzloorzgc3djpjssazlwmvzhs5dinfxgoijb",
+	Base32padUpper:    "CIRSWGZLOORZGC3DJPJSSAZLWMVZHS5DINFXGOIJB",
+	Base32hex:         "v8him6pbeehp62r39f9ii0pbmclp7it38d5n6e891",
+	Base32hexUpper:    "V8HIM6PBEEHP62R39F9II0PBMCLP7IT38D5N6E891",
+	Base32hexPad:      "t8him6pbeehp62r39f9ii0pbmclp7it38d5n6e891",
+	Base32hexPadUpper: "T8HIM6PBEEHP62R39F9II0PBMCLP7IT38D5N6E891",
+	Base58BTC:         "zUXE7GvtEk8XTXs1GF8HSGbVA9FCX9SEBPe",
+	Base64pad:         "MRGVjZW50cmFsaXplIGV2ZXJ5dGhpbmchIQ==",
+	Base64urlPad:      "URGVjZW50cmFsaXplIGV2ZXJ5dGhpbmchIQ==",
 }
 
 func testEncode(t *testing.T, encoding Encoding, bytes []byte, expected string) {

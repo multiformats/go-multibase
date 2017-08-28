@@ -51,14 +51,22 @@ func Encode(base Encoding, data []byte) (string, error) {
 		return string(Identity) + string(data), nil
 	case Base16, Base16Upper:
 		return string(Base16) + hex.EncodeToString(data), nil
-	case Base32, Base32Upper:
-		return string(Base32) + b32.RawStdEncoding.EncodeToString(data), nil
-	case Base32hex, Base32hexUpper:
-		return string(Base32hex) + b32.RawHexEncoding.EncodeToString(data), nil
-	case Base32pad, Base32padUpper:
-		return string(Base32pad) + b32.StdEncoding.EncodeToString(data), nil
-	case Base32hexPad, Base32hexPadUpper:
-		return string(Base32hexPad) + b32.HexEncoding.EncodeToString(data), nil
+	case Base32:
+		return string(Base32) + base32StdLowerNoPad.EncodeToString(data), nil
+	case Base32Upper:
+		return string(Base32Upper) + base32StdUpperNoPad.EncodeToString(data), nil
+	case Base32hex:
+		return string(Base32hex) + base32HexLowerNoPad.EncodeToString(data), nil
+	case Base32hexUpper:
+		return string(Base32hexUpper) + base32HexUpperNoPad.EncodeToString(data), nil
+	case Base32pad:
+		return string(Base32pad) + base32StdLowerPad.EncodeToString(data), nil
+	case Base32padUpper:
+		return string(Base32padUpper) + base32StdUpperPad.EncodeToString(data), nil
+	case Base32hexPad:
+		return string(Base32hexPad) + base32HexLowerPad.EncodeToString(data), nil
+	case Base32hexPadUpper:
+		return string(Base32hexPadUpper) + base32HexUpperPad.EncodeToString(data), nil
 	case Base58BTC:
 		return string(Base58BTC) + b58.EncodeAlphabet(data, b58.BTCAlphabet), nil
 	case Base58Flickr:
@@ -83,24 +91,26 @@ func Decode(data string) (Encoding, []byte, error) {
 		return 0, nil, fmt.Errorf("cannot decode multibase for zero length string")
 	}
 
-	switch data[0] {
+	enc := Encoding(data[0])
+
+	switch enc {
 	case Identity:
 		return Identity, []byte(data[1:]), nil
 	case Base16, Base16Upper:
 		bytes, err := hex.DecodeString(data[1:])
-		return Base16, bytes, err
+		return enc, bytes, err
 	case Base32, Base32Upper:
 		bytes, err := b32.RawStdEncoding.DecodeString(data[1:])
-		return Base32, bytes, err
+		return enc, bytes, err
 	case Base32hex, Base32hexUpper:
 		bytes, err := b32.RawHexEncoding.DecodeString(data[1:])
-		return Base32hex, bytes, err
+		return enc, bytes, err
 	case Base32pad, Base32padUpper:
 		bytes, err := b32.StdEncoding.DecodeString(data[1:])
-		return Base32pad, bytes, err
+		return enc, bytes, err
 	case Base32hexPad, Base32hexPadUpper:
 		bytes, err := b32.HexEncoding.DecodeString(data[1:])
-		return Base32hexPad, bytes, err
+		return enc, bytes, err
 	case Base58BTC:
 		return Base58BTC, b58.DecodeAlphabet(data[1:], b58.BTCAlphabet), nil
 	case Base58Flickr:
@@ -121,3 +131,15 @@ func Decode(data string) (Encoding, []byte, error) {
 		return -1, nil, ErrUnsupportedEncoding
 	}
 }
+
+var base32StdLowerPad = b32.NewEncodingCI("abcdefghijklmnopqrstuvwxyz234567")
+var base32StdLowerNoPad = base32StdLowerPad.WithPadding(b32.NoPadding)
+
+var base32StdUpperPad = b32.NewEncodingCI("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567")
+var base32StdUpperNoPad = base32StdUpperPad.WithPadding(b32.NoPadding)
+
+var base32HexLowerPad = b32.NewEncodingCI("0123456789abcdefghijklmnopqrstuv")
+var base32HexLowerNoPad = base32HexLowerPad.WithPadding(b32.NoPadding)
+
+var base32HexUpperPad = b32.NewEncodingCI("0123456789ABCDEFGHIJKLMNOPQRSTUV")
+var base32HexUpperNoPad = base32HexUpperPad.WithPadding(b32.NoPadding)
