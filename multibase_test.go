@@ -10,6 +10,7 @@ var sampleBytes = []byte("Decentralize everything!!")
 var encodedSamples = map[Encoding]string{
 	Identity:          string(0x00) + "Decentralize everything!!",
 	Base16:            "f446563656e7472616c697a652065766572797468696e672121",
+	Base16Upper:       "F446563656E7472616C697A652065766572797468696E672121",
 	Base32:            "birswgzloorzgc3djpjssazlwmvzhs5dinfxgoijb",
 	Base32Upper:       "BIRSWGZLOORZGC3DJPJSSAZLWMVZHS5DINFXGOIJB",
 	Base32pad:         "cirswgzloorzgc3djpjssazlwmvzhs5dinfxgoijb",

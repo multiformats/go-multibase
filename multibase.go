@@ -49,8 +49,10 @@ func Encode(base Encoding, data []byte) (string, error) {
 	case Identity:
 		// 0x00 inside a string is OK in golang and causes no problems with the length calculation.
 		return string(Identity) + string(data), nil
-	case Base16, Base16Upper:
+	case Base16:
 		return string(Base16) + hex.EncodeToString(data), nil
+	case Base16Upper:
+		return string(Base16Upper) + hexEncodeToStringUpper(data), nil
 	case Base32:
 		return string(Base32) + base32StdLowerNoPad.EncodeToString(data), nil
 	case Base32Upper:
@@ -143,3 +145,24 @@ var base32HexLowerNoPad = base32HexLowerPad.WithPadding(b32.NoPadding)
 
 var base32HexUpperPad = b32.NewEncodingCI("0123456789ABCDEFGHIJKLMNOPQRSTUV")
 var base32HexUpperNoPad = base32HexUpperPad.WithPadding(b32.NoPadding)
+
+
+func hexEncodeToStringUpper(src []byte) string {
+	dst := make([]byte, len(src) * 2)
+	hexEncodeUpper(dst, src)
+	return string(dst)
+}
+
+var hextableUpper = [16]byte{
+	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+	'A', 'B', 'C', 'D', 'E', 'F',
+}
+
+func hexEncodeUpper(dst, src []byte) int {
+	for i, v := range src {
+		dst[i*2] = hextableUpper[v>>4]
+		dst[i*2+1] = hextableUpper[v&0x0f]
+	}
+
+	return len(src) * 2
+}
