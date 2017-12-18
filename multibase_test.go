@@ -92,3 +92,53 @@ func TestRoundTrip(t *testing.T) {
 		t.Fatal("shouldnt be able to decode empty string")
 	}
 }
+
+func BenchmarkRoundTrip(b *testing.B) {
+	buf := make([]byte, 32)
+	rand.Read(buf)
+	b.ResetTimer()
+
+	bases := map[string]Encoding{
+		"Identity":          Identity,
+		"Base16":            Base16,
+		"Base16Upper":       Base16Upper,
+		"Base32":            Base32,
+		"Base32Upper":       Base32Upper,
+		"Base32pad":         Base32pad,
+		"Base32padUpper":    Base32padUpper,
+		"Base32hex":         Base32hex,
+		"Base32hexUpper":    Base32hexUpper,
+		"Base32hexPad":      Base32hexPad,
+		"Base32hexPadUpper": Base32hexPadUpper,
+		"Base58Flickr":      Base58Flickr,
+		"Base58BTC":         Base58BTC,
+		"Base64":            Base64,
+		"Base64url":         Base64url,
+		"Base64pad":         Base64pad,
+		"Base64urlPad":      Base64urlPad,
+	}
+
+	for name, base := range bases {
+		b.Run(name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				enc, err := Encode(base, buf)
+				if err != nil {
+					b.Fatal(err)
+				}
+
+				e, out, err := Decode(enc)
+				if err != nil {
+					b.Fatal(err)
+				}
+
+				if e != base {
+					b.Fatal("got wrong encoding out")
+				}
+
+				if !bytes.Equal(buf, out) {
+					b.Fatal("input wasnt the same as output", buf, out)
+				}
+			}
+		})
+	}
+}
