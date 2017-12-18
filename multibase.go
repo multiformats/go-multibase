@@ -5,7 +5,7 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	b58 "github.com/jbenet/go-base58"
+	b58 "github.com/mr-tron/base58/base58"
 	b32 "github.com/whyrusleeping/base32"
 )
 
@@ -114,9 +114,11 @@ func Decode(data string) (Encoding, []byte, error) {
 		bytes, err := b32.HexEncoding.DecodeString(data[1:])
 		return enc, bytes, err
 	case Base58BTC:
-		return Base58BTC, b58.DecodeAlphabet(data[1:], b58.BTCAlphabet), nil
+		bytes, err := b58.DecodeAlphabet(data[1:], b58.BTCAlphabet)
+		return Base58BTC, bytes, err
 	case Base58Flickr:
-		return Base58Flickr, b58.DecodeAlphabet(data[1:], b58.FlickrAlphabet), nil
+		bytes, err := b58.DecodeAlphabet(data[1:], b58.FlickrAlphabet)
+		return Base58Flickr, bytes, err
 	case Base64pad:
 		bytes, err := base64.StdEncoding.DecodeString(data[1:])
 		return Base64pad, bytes, err
