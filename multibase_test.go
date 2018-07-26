@@ -6,6 +6,21 @@ import (
 	"testing"
 )
 
+func TestMap(t *testing.T) {
+	for s,e := range Encodings {
+		s2 := EncodingToStr[e]
+		if s != s2 {
+			t.Errorf("round trip failed on encoding map: %s != %s", s, s2)
+		}
+	}
+	for e,s := range EncodingToStr {
+		e2 := Encodings[s]
+		if e != e2 {
+			t.Errorf("round trip failed on encoding map: '%c' != '%c'", e, e2)
+		}
+	}
+}
+
 var sampleBytes = []byte("Decentralize everything!!!")
 var encodedSamples = map[Encoding]string{
 	Identity:          string(0x00) + "Decentralize everything!!!",
