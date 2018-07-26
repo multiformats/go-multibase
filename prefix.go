@@ -1,23 +1,59 @@
 package multibase
 
-import ()
+import (
+	"fmt"
+)
 
+// Prefix is a multibase encoding that is verified to be supported and
+// supports an Encode method that does not return an error
 type Prefix struct {
 	enc Encoding
 }
 
-func NewPrefix(e Encoding) (Prefix, error) {
-	_, err := Encode(e, nil)
-	if err != nil {
-		return Prefix{-1}, err
+// NewPrefix create a new Prefix type from either an Encoding or a
+// string.  If nil or an empty string the default base (currently
+// Base58BTC) will be used.
+func NewPrefix(e interface{}) (Prefix, error) {
+	base := Encoding(Base58BTC)
+	switch v := e.(type) {
+	case byte:
+		base = Encoding(v)
+	case rune:
+		base = Encoding(v)
+	case int:
+		base = Encoding(v)
+	case Encoding:
+		base = v
+	case string:
+		ok := true
+		// note: if empty string use default value
+		if len(v) == 1 {
+			base = Encoding(v[0])
+			_, ok = EncodingToStr[base]
+		} else if len(v) > 1 {
+			base, ok = Encodings[v]
+		}
+		if !ok {
+			return Prefix{-1}, fmt.Errorf("Unsupported multibase encoding: %s", v)
+		}
+		return Prefix{base}, nil
+	case nil:
+		/* use default value */
+	default:
+		return Prefix{-1}, fmt.Errorf("Unsupported parameter type.")
 	}
-	return Prefix{e}, nil
+	_, ok := EncodingToStr[base]
+	if !ok {
+		return Prefix{-1}, fmt.Errorf("Unsupported multibase encoding: %d", base)
+	}
+	return Prefix{base}, nil
 }
 
 func (p Prefix) Encoding() Encoding {
 	return p.enc
 }
 
+// Encode encodes the multibase using the given Prefix.  
 func (p Prefix) Encode(data []byte) string {
 	str, err := Encode(p.enc, data)
 	if err != nil {

@@ -12,8 +12,15 @@ func TestInvalidPrefix(t *testing.T) {
 }
 
 func TestPrefix(t *testing.T) {
-	for _, base := range Encodings {
-		prefix,err := NewPrefix(base)
+	prefix,err := NewPrefix(nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if prefix.Encoding() != Base58BTC {
+		t.Error("unexpected default encoding")
+	}
+	for str, base := range Encodings {
+		prefix,err = NewPrefix(base)
 		if err != nil {
 			t.Fatalf("NewPrefix(%c) failed: %v", base, err)
 		}
@@ -24,6 +31,10 @@ func TestPrefix(t *testing.T) {
 		str2 := prefix.Encode(sampleBytes)
 		if str1 != str2 {
 			t.Errorf("encoded string mismatch: %s != %s", str1, str2)
+		}
+		_, err = NewPrefix(str)
+		if err != nil {
+			t.Fatalf("NewPrefix(%s) failed: %v", str, err)
 		}
 	}
 }
