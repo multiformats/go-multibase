@@ -5,24 +5,17 @@ import (
 )
 
 func TestInvalidPrefix(t *testing.T) {
-	_, err := NewPrefix('q')
+	_, err := NewEncoder('q')
 	if err == nil {
 		t.Error("expected failure")
 	}
 }
 
 func TestPrefix(t *testing.T) {
-	prefix,err := NewPrefix(nil)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if prefix.Encoding() != Base58BTC {
-		t.Error("unexpected default encoding")
-	}
 	for str, base := range Encodings {
-		prefix,err = NewPrefix(base)
+		prefix, err := NewEncoder(base)
 		if err != nil {
-			t.Fatalf("NewPrefix(%c) failed: %v", base, err)
+			t.Fatalf("NewEncoder(%c) failed: %v", base, err)
 		}
 		str1, err := Encode(base, sampleBytes)
 		if err != nil {
@@ -32,9 +25,9 @@ func TestPrefix(t *testing.T) {
 		if str1 != str2 {
 			t.Errorf("encoded string mismatch: %s != %s", str1, str2)
 		}
-		_, err = NewPrefix(str)
+		_, err = EncoderByName(str)
 		if err != nil {
-			t.Fatalf("NewPrefix(%s) failed: %v", str, err)
+			t.Fatalf("NewEncoder(%s) failed: %v", str, err)
 		}
 	}
 }
