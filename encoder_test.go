@@ -11,6 +11,16 @@ func TestInvalidPrefix(t *testing.T) {
 	}
 }
 
+func TestInvalidName(t *testing.T) {
+	values := []string{"invalid", "", "q"}
+	for _, val := range values {
+		_, err := EncoderByName(val)
+		if err == nil {
+			t.Errorf("EncoderByName(%v) expected failure", val)
+		}
+	}
+}
+
 func TestPrefix(t *testing.T) {
 	for str, base := range Encodings {
 		prefix, err := NewEncoder(base)
