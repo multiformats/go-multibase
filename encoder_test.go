@@ -4,13 +4,6 @@ import (
 	"testing"
 )
 
-func TestInvalidPrefix(t *testing.T) {
-	_, err := NewEncoder('q')
-	if err == nil {
-		t.Error("expected failure")
-	}
-}
-
 func TestInvalidName(t *testing.T) {
 	values := []string{"invalid", "", "q"}
 	for _, val := range values {
@@ -21,23 +14,26 @@ func TestInvalidName(t *testing.T) {
 	}
 }
 
-func TestPrefix(t *testing.T) {
-	for str, base := range Encodings {
-		prefix, err := NewEncoder(base)
-		if err != nil {
-			t.Fatalf("NewEncoder(%c) failed: %v", base, err)
-		}
-		str1, err := Encode(base, sampleBytes)
+func TestEncoder(t *testing.T) {
+	for name, code := range Encodings {
+		encoder := NewEncoder(code)
+		str, err := Encode(code, sampleBytes)
 		if err != nil {
 			t.Fatal(err)
 		}
-		str2 := prefix.Encode(sampleBytes)
-		if str1 != str2 {
-			t.Errorf("encoded string mismatch: %s != %s", str1, str2)
+		str2 := encoder.Encode(sampleBytes)
+		if str != str2 {
+			t.Errorf("encoded string mismatch: %s != %s", str, str2)
 		}
-		_, err = EncoderByName(str)
+		_, err = EncoderByName(name)
 		if err != nil {
-			t.Fatalf("NewEncoder(%s) failed: %v", str, err)
+			t.Errorf("EncoderByName(%s) failed: %v", name, err)
+		}
+		// Test that an encoder can be created from the single letter
+		// prefix
+		_, err = EncoderByName(str[0:1])
+		if err != nil {
+			t.Errorf("EncoderByName(%s) failed: %v", str[0:1], err)
 		}
 	}
 }

@@ -10,13 +10,15 @@ type Encoder struct {
 	enc Encoding
 }
 
-// NewEncoder create a new Encoder from an Encoding
-func NewEncoder(base Encoding) (Encoder, error) {
+// NewEncoder create a new Encoder from an Encoding.  It will panic is
+// the encoding is invalid.  To check for a valid encoding use the
+// EncodingToStr map.
+func NewEncoder(base Encoding) Encoder {
 	_, ok := EncodingToStr[base]
 	if !ok {
-		return Encoder{-1}, fmt.Errorf("Unsupported multibase encoding: %d", base)
+		panic(fmt.Errorf("Unsupported multibase encoding: %d", base))
 	}
-	return Encoder{base}, nil
+	return Encoder{base}
 }
 
 // EncoderByName creates an encoder from a string, the string can
