@@ -4,6 +4,13 @@ import (
 	"testing"
 )
 
+func TestInvalidEncoding(t *testing.T) {
+	err := CheckEncoding(Encoding('q'))
+	if err == nil {
+		t.Errorf("CheckEncoding('q') expected failure")
+	}
+}
+
 func TestInvalidName(t *testing.T) {
 	values := []string{"invalid", "", "q"}
 	for _, val := range values {
