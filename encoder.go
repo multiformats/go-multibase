@@ -19,6 +19,16 @@ func NewEncoder(base Encoding) (Encoder, error) {
 	return Encoder{base}, nil
 }
 
+// MustNewEncoder is like NewEncoder but will panic if the encoding is
+// invalid.
+func MustNewEncoder(base Encoding) Encoder {
+	_, ok := EncodingToStr[base]
+	if !ok {
+		panic("Unsupported multibase encoding")
+	}
+	return Encoder{base}
+}
+
 // EncoderByName creates an encoder from a string, the string can
 // either be the multibase name or single character multibase prefix
 func EncoderByName(str string) (Encoder, error) {
