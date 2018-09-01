@@ -4,10 +4,10 @@ import (
 	"testing"
 )
 
-func TestInvalidEncoding(t *testing.T) {
-	err := CheckEncoding(Encoding('q'))
+func TestInvalidCode(t *testing.T) {
+	_, err := NewEncoder('q')
 	if err == nil {
-		t.Errorf("CheckEncoding('q') expected failure")
+		t.Error("expected failure")
 	}
 }
 
@@ -23,7 +23,12 @@ func TestInvalidName(t *testing.T) {
 
 func TestEncoder(t *testing.T) {
 	for name, code := range Encodings {
-		encoder := NewEncoder(code)
+		encoder, err := NewEncoder(code)
+		if err != nil {
+			t.Fatal(err)
+		}
+		// Make sure the MustNewEncoder doesn't panic
+		MustNewEncoder(code)
 		str, err := Encode(code, sampleBytes)
 		if err != nil {
 			t.Fatal(err)
@@ -34,13 +39,13 @@ func TestEncoder(t *testing.T) {
 		}
 		_, err = EncoderByName(name)
 		if err != nil {
-			t.Errorf("EncoderByName(%s) failed: %v", name, err)
+			t.Fatalf("EncoderByName(%s) failed: %v", name, err)
 		}
 		// Test that an encoder can be created from the single letter
 		// prefix
 		_, err = EncoderByName(str[0:1])
 		if err != nil {
-			t.Errorf("EncoderByName(%s) failed: %v", str[0:1], err)
+			t.Fatalf("EncoderByName(%s) failed: %v", str[0:1], err)
 		}
 	}
 }
