@@ -38,7 +38,7 @@ const (
 	Base64urlPad      = 'U'
 )
 
-// Encodigs is a map of the supported encoding, unsupported encoding
+// Encodings is a map of the supported encoding, unsupported encoding
 // specified in standard are left out
 var Encodings = map[string]Encoding{
 	"identity":          0x00,
