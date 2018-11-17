@@ -14,8 +14,8 @@ func main() {
 	}
 
 	var newBase multibase.Encoding
-	if baseParm := os.Args[1]; len(baseParm) != 0 {
-		newBase = multibase.Encoding(baseParm[0])
+	if baseParam := os.Args[1]; len(baseParam) != 0 {
+		newBase = multibase.Encoding(baseParam[0])
 	} else {
 		fmt.Fprintln(os.Stderr, "<new-base> is empty")
 		os.Exit(1)
