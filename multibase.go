@@ -60,6 +60,7 @@ var Encodings = map[string]Encoding{
 	"base64urlpad":      'U',
 }
 
+// EncodingToStr is the reverse map to get string representation given encoding
 var EncodingToStr = map[Encoding]string{
 	0x00: "identity",
 	'f':  "base16",

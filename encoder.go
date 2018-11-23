@@ -48,6 +48,7 @@ func EncoderByName(str string) (Encoder, error) {
 	return Encoder{base}, nil
 }
 
+// Encoding returns the Encoder's encoding
 func (p Encoder) Encoding() Encoding {
 	return p.enc
 }
