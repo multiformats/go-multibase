@@ -2,6 +2,7 @@ package multibase
 
 import (
 	"bytes"
+	"fmt"
 	"math/rand"
 	"testing"
 )
@@ -82,8 +83,9 @@ func TestDecode(t *testing.T) {
 func TestRoundTrip(t *testing.T) {
 	buf := make([]byte, 17)
 	rand.Read(buf)
+	fmt.Println(buf)
 
-	baseList := []Encoding{Identity, Base16, Base32, Base32hex, Base32pad, Base32hexPad, Base58BTC, Base58Flickr, Base64pad, Base64urlPad}
+	baseList := []Encoding{Identity, Base8, Base16, Base32, Base32hex, Base32pad, Base32hexPad, Base58BTC, Base58Flickr, Base64pad, Base64urlPad}
 
 	for _, base := range baseList {
 		enc, err := Encode(base, buf)

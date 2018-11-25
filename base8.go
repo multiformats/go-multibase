@@ -37,7 +37,7 @@ func decodeOctalString(s string) ([]byte, error) {
 	}
 
 	for i, dstIndex := 0, 0; i < len(s); i = i + 3 {
-		value, err := strconv.ParseInt(s[i:i+3], 8, 8)
+		value, err := strconv.ParseInt(s[i:i+3], 8, 16)
 		if err != nil {
 			return nil, fmt.Errorf("error while conversion: %s", err)
 		}
