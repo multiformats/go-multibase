@@ -42,6 +42,7 @@ const (
 // specified in standard are left out
 var Encodings = map[string]Encoding{
 	"identity":          0x00,
+	"base8":             '7',
 	"base16":            'f',
 	"base16upper":       'F',
 	"base32":            'b',
@@ -63,6 +64,7 @@ var Encodings = map[string]Encoding{
 // EncodingToStr is the reverse map to get string representation given encoding
 var EncodingToStr = map[Encoding]string{
 	0x00: "identity",
+	'7':  "base8",
 	'f':  "base16",
 	'F':  "base16upper",
 	'b':  "base32",
@@ -93,6 +95,8 @@ func Encode(base Encoding, data []byte) (string, error) {
 	case Identity:
 		// 0x00 inside a string is OK in golang and causes no problems with the length calculation.
 		return string(Identity) + string(data), nil
+	case Base8:
+		return string(Base8) + octalEncodeToString(data), nil
 	case Base16:
 		return string(Base16) + hex.EncodeToString(data), nil
 	case Base16Upper:
@@ -142,6 +146,9 @@ func Decode(data string) (Encoding, []byte, error) {
 	switch enc {
 	case Identity:
 		return Identity, []byte(data[1:]), nil
+	case Base8:
+		bytes, err := decodeOctalString(data[1:])
+		return enc, bytes, err
 	case Base16, Base16Upper:
 		bytes, err := hex.DecodeString(data[1:])
 		return enc, bytes, err
