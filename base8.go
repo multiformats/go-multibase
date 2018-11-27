@@ -30,11 +30,12 @@ func octalEncode(dst, src []byte) int {
 
 // decodeOctalString takes an octal string and gives byte array of decimals
 func decodeOctalString(s string) ([]byte, error) {
-	data := make([]byte, len(s)/3)
 	if len(s)%3 != 0 {
 		return nil, fmt.Errorf("cannot decode multibase: %s",
 			"length should be a multiple of 3")
 	}
+
+	data := make([]byte, len(s)/3)
 
 	for i, dstIndex := 0, 0; i < len(s); i = i + 3 {
 		value, err := strconv.ParseInt(s[i:i+3], 8, 16)
