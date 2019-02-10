@@ -24,6 +24,7 @@ func TestMap(t *testing.T) {
 var sampleBytes = []byte("Decentralize everything!!!")
 var encodedSamples = map[Encoding]string{
 	Identity:          string(0x00) + "Decentralize everything!!!",
+	Base8:             "7104145143145156164162141154151172145040145166145162171164150151156147041041041",
 	Base16:            "f446563656e7472616c697a652065766572797468696e67212121",
 	Base16Upper:       "F446563656E7472616C697A652065766572797468696E67212121",
 	Base32:            "birswgzloorzgc3djpjssazlwmvzhs5dinfxgoijbee",
@@ -82,7 +83,7 @@ func TestRoundTrip(t *testing.T) {
 	buf := make([]byte, 17)
 	rand.Read(buf)
 
-	baseList := []Encoding{Identity, Base16, Base32, Base32hex, Base32pad, Base32hexPad, Base58BTC, Base58Flickr, Base64pad, Base64urlPad}
+	baseList := []Encoding{Identity, Base8, Base16, Base32, Base32hex, Base32pad, Base32hexPad, Base58BTC, Base58Flickr, Base64pad, Base64urlPad}
 
 	for _, base := range baseList {
 		enc, err := Encode(base, buf)
@@ -96,17 +97,17 @@ func TestRoundTrip(t *testing.T) {
 		}
 
 		if e != base {
-			t.Fatal("got wrong encoding out")
+			t.Fatal("got wrong encoding output")
 		}
 
 		if !bytes.Equal(buf, out) {
-			t.Fatal("input wasnt the same as output", buf, out)
+			t.Fatal("input wasn't the same as output", buf, out)
 		}
 	}
 
 	_, _, err := Decode("")
 	if err == nil {
-		t.Fatal("shouldnt be able to decode empty string")
+		t.Fatal("shouldn't be able to decode empty string")
 	}
 }
 
@@ -117,6 +118,7 @@ func BenchmarkRoundTrip(b *testing.B) {
 
 	bases := map[string]Encoding{
 		"Identity":          Identity,
+		"Base8":             Base8,
 		"Base16":            Base16,
 		"Base16Upper":       Base16Upper,
 		"Base32":            Base32,
@@ -149,11 +151,11 @@ func BenchmarkRoundTrip(b *testing.B) {
 				}
 
 				if e != base {
-					b.Fatal("got wrong encoding out")
+					b.Fatal("got wrong encoding output")
 				}
 
 				if !bytes.Equal(buf, out) {
-					b.Fatal("input wasnt the same as output", buf, out)
+					b.Fatal("input wasn't the same as output", buf, out)
 				}
 			}
 		})
