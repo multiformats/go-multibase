@@ -24,6 +24,7 @@ func TestMap(t *testing.T) {
 var sampleBytes = []byte("Decentralize everything!!!")
 var encodedSamples = map[Encoding]string{
 	Identity:          string(0x00) + "Decentralize everything!!!",
+	Base2:             "00100010001100101011000110110010101101110011101000111001001100001011011000110100101111010011001010010000001100101011101100110010101110010011110010111010001101000011010010110111001100111001000010010000100100001",
 	Base16:            "f446563656e7472616c697a652065766572797468696e67212121",
 	Base16Upper:       "F446563656E7472616C697A652065766572797468696E67212121",
 	Base32:            "birswgzloorzgc3djpjssazlwmvzhs5dinfxgoijbee",
@@ -117,6 +118,7 @@ func BenchmarkRoundTrip(b *testing.B) {
 
 	bases := map[string]Encoding{
 		"Identity":          Identity,
+		"Base2":             Base2,
 		"Base16":            Base16,
 		"Base16Upper":       Base16Upper,
 		"Base32":            Base32,
