@@ -34,7 +34,7 @@ func encodeBinary(dst []byte, src []byte) {
 // decodeBinaryString takes multibase binary representation
 // and returns a byte array
 func decodeBinaryString(s string) ([]byte, error) {
-	if len(s) % 8 != 0 {
+	if len(s)%8 != 0 {
 		return nil, fmt.Errorf("cannot decode multibase: %s",
 			"length should be a multiple of 4")
 	}
