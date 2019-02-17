@@ -2,7 +2,6 @@ package multibase
 
 import (
 	"fmt"
-	"math"
 	"strconv"
 	"strings"
 )
@@ -18,15 +17,12 @@ func binaryEncodeToString(src []byte) string {
 // encodeBinary takes the src and dst bytes and converts each
 // byte to their binary rep using power reduction method
 func encodeBinary(dst []byte, src []byte) {
-	for i := 0; i < len(src); i++ {
-		t := src[i]
-		for j := i << 3; j < (i<<3)+8; j++ {
-			higherPower := math.Pow(2, float64(7-(j&7)))
-			if t >= byte(higherPower) {
-				dst[j] = '1'
-				t = t - byte(higherPower)
+	for i, b := range src {
+		for j := 0; j < 8; j++ {
+			if b&(1<<uint(7-j)) == 0 {
+				dst[i*8+j] = '0'
 			} else {
-				dst[j] = '0'
+				dst[i*8+j] = '1'
 			}
 		}
 	}
