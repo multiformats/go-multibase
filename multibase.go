@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	b58 "github.com/mr-tron/base58/base58"
-	b32 "github.com/whyrusleeping/base32"
+	b32 "github.com/multiformats/go-base32"
 )
 
 // Encoding identifies the type of base-encoding that a multibase is carrying.
