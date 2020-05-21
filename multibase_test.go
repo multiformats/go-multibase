@@ -80,28 +80,68 @@ func TestDecode(t *testing.T) {
 }
 
 func TestRoundTrip(t *testing.T) {
-	buf := make([]byte, 17)
-	rand.Read(buf)
+	buf := make([]byte, 37+16) // sufficiently large prime number of bytes (37) + another 16 to test leading 0s
+	rand.Read(buf[16:])
 
-	baseList := []Encoding{Identity, Base16, Base32, Base32hex, Base32pad, Base32hexPad, Base58BTC, Base58Flickr, Base64pad, Base64urlPad}
+	for base := range EncodingToStr {
 
-	for _, base := range baseList {
-		enc, err := Encode(base, buf)
-		if err != nil {
-			t.Fatal(err)
-		}
+		// test roundtrip from the full zero-prefixed buffer down to a single byte
+		for i := 0; i <= len(buf)-1; i++ {
 
-		e, out, err := Decode(enc)
-		if err != nil {
-			t.Fatal(err)
-		}
+			// use a copy to verify we are not overwriting the supplied buffer
+			newBuf := make([]byte, len(buf)-i)
+			copy(newBuf, buf[i:])
 
-		if e != base {
-			t.Fatal("got wrong encoding out")
-		}
+			enc, err := Encode(base, newBuf)
+			if err != nil {
+				t.Fatal(err)
+			}
 
-		if !bytes.Equal(buf, out) {
-			t.Fatal("input wasnt the same as output", buf, out)
+			e, out, err := Decode(enc)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			if e != base {
+				t.Fatal("got wrong encoding out")
+			}
+
+			if !bytes.Equal(newBuf, buf[i:]) {
+				t.Fatal("the provided buffer was modified", buf[i:], out)
+			}
+
+			if !bytes.Equal(buf[i:], out) {
+				t.Fatal("input wasnt the same as output", buf[i:], out)
+			}
+
+			// When we have 3 leading zeroes, and this is a case-insensitive codec
+			// semi-randomly swap case in enc and try again
+			if i == 13 {
+				name := EncodingToStr[base]
+				if name[len(name)-5:] == "upper" || Encodings[name+"upper"] > 0 {
+					caseTamperedEnc := []byte(enc)
+
+					for _, j := range []int{3, 5, 8, 13, 21, 23, 29} {
+						if caseTamperedEnc[j] >= 65 && caseTamperedEnc[j] <= 90 {
+							caseTamperedEnc[j] += 32
+						} else if caseTamperedEnc[j] >= 97 && caseTamperedEnc[j] <= 122 {
+							caseTamperedEnc[j] -= 32
+						}
+					}
+
+					e, out, err := Decode(string(caseTamperedEnc))
+					if err != nil {
+						t.Fatal(err)
+					}
+
+					if e != base {
+						t.Fatal("got wrong encoding out")
+					}
+					if !bytes.Equal(buf[i:], out) {
+						t.Fatal("input wasnt the same as output", buf[i:], out)
+					}
+				}
+			}
 		}
 	}
 
