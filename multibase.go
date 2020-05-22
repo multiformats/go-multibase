@@ -40,31 +40,8 @@ const (
 	Base64urlPad      = 'U'
 )
 
-// Encodings is a map of the supported encoding, unsupported encoding
+// EncodingToStr is a map of the supported encoding, unsupported encoding
 // specified in standard are left out
-var Encodings = map[string]Encoding{
-	"identity":          0x00,
-	"base2":             '0',
-	"base16":            'f',
-	"base16upper":       'F',
-	"base32":            'b',
-	"base32upper":       'B',
-	"base32pad":         'c',
-	"base32padupper":    'C',
-	"base32hex":         'v',
-	"base32hexupper":    'V',
-	"base32hexpad":      't',
-	"base32hexpadupper": 'T',
-	"base36upper":       'K',
-	"base36":            'k',
-	"base58flickr":      'Z',
-	"base58btc":         'z',
-	"base64":            'm',
-	"base64url":         'u',
-	"base64pad":         'M',
-	"base64urlpad":      'U',
-}
-
 var EncodingToStr = map[Encoding]string{
 	0x00: "identity",
 	'0':  "base2",
@@ -78,14 +55,22 @@ var EncodingToStr = map[Encoding]string{
 	'V':  "base32hexupper",
 	't':  "base32hexpad",
 	'T':  "base32hexpadupper",
-	'K':  "base36upper",
 	'k':  "base36",
-	'Z':  "base58flickr",
+	'K':  "base36upper",
 	'z':  "base58btc",
+	'Z':  "base58flickr",
 	'm':  "base64",
 	'u':  "base64url",
 	'M':  "base64pad",
 	'U':  "base64urlpad",
+}
+
+var Encodings = map[string]Encoding{}
+
+func init() {
+	for e, n := range EncodingToStr {
+		Encodings[n] = e
+	}
 }
 
 // ErrUnsupportedEncoding is returned when the selected encoding is not known or
@@ -122,10 +107,10 @@ func Encode(base Encoding, data []byte) (string, error) {
 		return string(Base32hexPad) + base32HexLowerPad.EncodeToString(data), nil
 	case Base32hexPadUpper:
 		return string(Base32hexPadUpper) + base32HexUpperPad.EncodeToString(data), nil
-	case Base36Upper:
-		return string(Base36Upper) + b36.EncodeToStringUC(data), nil
 	case Base36:
-		return string(Base36) + b36.EncodeToString(data), nil
+		return string(Base36) + b36.EncodeToStringLc(data), nil
+	case Base36Upper:
+		return string(Base36Upper) + b36.EncodeToStringUc(data), nil
 	case Base58BTC:
 		return string(Base58BTC) + b58.EncodeAlphabet(data, b58.BTCAlphabet), nil
 	case Base58Flickr:
