@@ -37,29 +37,8 @@ const (
 	Base64urlPad      = 'U'
 )
 
-// Encodings is a map of the supported encoding, unsupported encoding
+// EncodingToStr is a map of the supported encoding, unsupported encoding
 // specified in standard are left out
-var Encodings = map[string]Encoding{
-	"identity":          0x00,
-	"base2":             '0',
-	"base16":            'f',
-	"base16upper":       'F',
-	"base32":            'b',
-	"base32upper":       'B',
-	"base32pad":         'c',
-	"base32padupper":    'C',
-	"base32hex":         'v',
-	"base32hexupper":    'V',
-	"base32hexpad":      't',
-	"base32hexpadupper": 'T',
-	"base58flickr":      'Z',
-	"base58btc":         'z',
-	"base64":            'm',
-	"base64url":         'u',
-	"base64pad":         'M',
-	"base64urlpad":      'U',
-}
-
 var EncodingToStr = map[Encoding]string{
 	0x00: "identity",
 	'0':  "base2",
@@ -73,12 +52,20 @@ var EncodingToStr = map[Encoding]string{
 	'V':  "base32hexupper",
 	't':  "base32hexpad",
 	'T':  "base32hexpadupper",
-	'Z':  "base58flickr",
 	'z':  "base58btc",
+	'Z':  "base58flickr",
 	'm':  "base64",
 	'u':  "base64url",
 	'M':  "base64pad",
 	'U':  "base64urlpad",
+}
+
+var Encodings = map[string]Encoding{}
+
+func init() {
+	for e, n := range EncodingToStr {
+		Encodings[n] = e
+	}
 }
 
 // ErrUnsupportedEncoding is returned when the selected encoding is not known or
