@@ -5,7 +5,7 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	b58 "github.com/mr-tron/base58/base58"
+	b58 "github.com/mr-tron/base58"
 	b32 "github.com/multiformats/go-base32"
 	b36 "github.com/multiformats/go-base36"
 )
