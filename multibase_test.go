@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"math/rand"
 	"sort"
+	"strings"
 	"testing"
 )
 
@@ -108,6 +109,27 @@ func TestRoundTrip(t *testing.T) {
 		if err == nil {
 			t.Fatal(EncodingToStr[base] + " decode should fail on high-latin1")
 		}
+	}
+
+	for base := range EncodingToStr {
+
+		name := EncodingToStr[base]
+		if name == "base2" ||
+			strings.HasSuffix(name, "pad") ||
+			strings.HasSuffix(name, "padupper") {
+			continue
+		}
+
+		// try to roundtrip a lone '2'
+		encType, decodedBytes, err := Decode(string(base) + "2")
+		if err != nil {
+			t.Fatalf("%s decode of '2' failed: %s", EncodingToStr[base], err)
+		}
+		if encType != base {
+			t.Fatal("decoded wrong encoding")
+		}
+
+		testEncode(t, base, decodedBytes, string(base)+"2")
 	}
 
 	buf := make([]byte, 137+16) // sufficiently large prime number of bytes + another 16 to test leading 0s
