@@ -36,6 +36,8 @@ var encodedSamples = map[Encoding]string{
 	Base32hexUpper:    "V8HIM6PBEEHP62R39F9II0PBMCLP7IT38D5N6E89144",
 	Base32hexPad:      "t8him6pbeehp62r39f9ii0pbmclp7it38d5n6e89144======",
 	Base32hexPadUpper: "T8HIM6PBEEHP62R39F9II0PBMCLP7IT38D5N6E89144======",
+	Base36:            "km552ng4dabi4neu1oo8l4i5mndwmpc3mkukwtxy9",
+	Base36Upper:       "KM552NG4DABI4NEU1OO8L4I5MNDWMPC3MKUKWTXY9",
 	Base58BTC:         "z36UQrhJq9fNDS7DiAHM9YXqDHMPfr4EMArvt",
 	Base58Flickr:      "Z36tpRGiQ9Endr7dHahm9xwQdhmoER4emaRVT",
 	Base64:            "mRGVjZW50cmFsaXplIGV2ZXJ5dGhpbmchISE",

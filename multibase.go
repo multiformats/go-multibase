@@ -7,6 +7,7 @@ import (
 
 	b58 "github.com/mr-tron/base58/base58"
 	b32 "github.com/multiformats/go-base32"
+	b36 "github.com/multiformats/go-base36"
 )
 
 // Encoding identifies the type of base-encoding that a multibase is carrying.
@@ -29,8 +30,10 @@ const (
 	Base32hexUpper    = 'V'
 	Base32hexPad      = 't'
 	Base32hexPadUpper = 'T'
-	Base58Flickr      = 'Z'
+	Base36            = 'k'
+	Base36Upper       = 'K'
 	Base58BTC         = 'z'
+	Base58Flickr      = 'Z'
 	Base64            = 'm'
 	Base64url         = 'u'
 	Base64pad         = 'M'
@@ -52,6 +55,8 @@ var EncodingToStr = map[Encoding]string{
 	'V':  "base32hexupper",
 	't':  "base32hexpad",
 	'T':  "base32hexpadupper",
+	'k':  "base36",
+	'K':  "base36upper",
 	'z':  "base58btc",
 	'Z':  "base58flickr",
 	'm':  "base64",
@@ -102,6 +107,10 @@ func Encode(base Encoding, data []byte) (string, error) {
 		return string(Base32hexPad) + base32HexLowerPad.EncodeToString(data), nil
 	case Base32hexPadUpper:
 		return string(Base32hexPadUpper) + base32HexUpperPad.EncodeToString(data), nil
+	case Base36:
+		return string(Base36) + b36.EncodeToStringLc(data), nil
+	case Base36Upper:
+		return string(Base36Upper) + b36.EncodeToStringUc(data), nil
 	case Base58BTC:
 		return string(Base58BTC) + b58.EncodeAlphabet(data, b58.BTCAlphabet), nil
 	case Base58Flickr:
@@ -148,6 +157,9 @@ func Decode(data string) (Encoding, []byte, error) {
 		return enc, bytes, err
 	case Base32hexPad, Base32hexPadUpper:
 		bytes, err := b32.HexEncoding.DecodeString(data[1:])
+		return enc, bytes, err
+	case Base36, Base36Upper:
+		bytes, err := b36.DecodeString(data[1:])
 		return enc, bytes, err
 	case Base58BTC:
 		bytes, err := b58.DecodeAlphabet(data[1:], b58.BTCAlphabet)
