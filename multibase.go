@@ -84,7 +84,7 @@ func Encode(base Encoding, data []byte) (string, error) {
 	switch base {
 	case Identity:
 		// 0x00 inside a string is OK in golang and causes no problems with the length calculation.
-		return string(Identity) + string(data), nil
+		return string(rune(Identity)) + string(data), nil
 	case Base2:
 		return string(Base2) + binaryEncodeToString(data), nil
 	case Base16:

@@ -24,7 +24,7 @@ func TestMap(t *testing.T) {
 
 var sampleBytes = []byte("Decentralize everything!!!")
 var encodedSamples = map[Encoding]string{
-	Identity:          string(0x00) + "Decentralize everything!!!",
+	Identity:          string(rune(0x00)) + "Decentralize everything!!!",
 	Base2:             "00100010001100101011000110110010101101110011101000111001001100001011011000110100101111010011001010010000001100101011101100110010101110010011110010111010001101000011010010110111001100111001000010010000100100001",
 	Base16:            "f446563656e7472616c697a652065766572797468696e67212121",
 	Base16Upper:       "F446563656E7472616C697A652065766572797468696E67212121",
@@ -91,22 +91,22 @@ func TestRoundTrip(t *testing.T) {
 			continue
 		}
 
-		_, _, err := Decode(string(base) + "\u00A0")
+		_, _, err := Decode(string(rune(base)) + "\u00A0")
 		if err == nil {
 			t.Fatal(EncodingToStr[base] + " decode should fail on low-unicode")
 		}
 
-		_, _, err = Decode(string(base) + "\u1F4A8")
+		_, _, err = Decode(string(rune(base)) + "\u1F4A8")
 		if err == nil {
 			t.Fatal(EncodingToStr[base] + " decode should fail on emoji")
 		}
 
-		_, _, err = Decode(string(base) + "!")
+		_, _, err = Decode(string(rune(base)) + "!")
 		if err == nil {
 			t.Fatal(EncodingToStr[base] + " decode should fail on punctuation")
 		}
 
-		_, _, err = Decode(string(base) + "\xA0")
+		_, _, err = Decode(string(rune(base)) + "\xA0")
 		if err == nil {
 			t.Fatal(EncodingToStr[base] + " decode should fail on high-latin1")
 		}
