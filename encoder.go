@@ -14,7 +14,7 @@ type Encoder struct {
 func NewEncoder(base Encoding) (Encoder, error) {
 	_, ok := EncodingToStr[base]
 	if !ok {
-		return Encoder{-1}, fmt.Errorf("Unsupported multibase encoding: %d", base)
+		return Encoder{-1}, fmt.Errorf("unsupported multibase encoding: %d", base)
 	}
 	return Encoder{base}, nil
 }
@@ -33,9 +33,9 @@ func MustNewEncoder(base Encoding) Encoder {
 // either be the multibase name or single character multibase prefix
 func EncoderByName(str string) (Encoder, error) {
 	var base Encoding
-	ok := true
+	var ok bool
 	if len(str) == 0 {
-		return Encoder{-1}, fmt.Errorf("Empty multibase encoding")
+		return Encoder{-1}, fmt.Errorf("empty multibase encoding")
 	} else if len(str) == 1 {
 		base = Encoding(str[0])
 		_, ok = EncodingToStr[base]
@@ -43,7 +43,7 @@ func EncoderByName(str string) (Encoder, error) {
 		base, ok = Encodings[str]
 	}
 	if !ok {
-		return Encoder{-1}, fmt.Errorf("Unsupported multibase encoding: %s", str)
+		return Encoder{-1}, fmt.Errorf("unsupported multibase encoding: %s", str)
 	}
 	return Encoder{base}, nil
 }
