@@ -1,6 +1,6 @@
 module github.com/multiformats/go-multibase
 
-go 1.15
+go 1.16
 
 require (
 	github.com/mr-tron/base58 v1.1.0
