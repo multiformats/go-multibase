@@ -66,7 +66,7 @@ func TestSpec(t *testing.T) {
 	}
 }
 func TestSpecVectors(t *testing.T) {
-	files, err := filepath.Glob("spec/tests/test[0-9]*.csv")
+	files, err := filepath.Glob("spec/tests/*.csv")
 	if err != nil {
 		t.Fatal(err)
 	}
