@@ -2,6 +2,7 @@ package multibase
 
 import (
 	"testing"
+	"unicode/utf8"
 )
 
 func TestInvalidCode(t *testing.T) {
@@ -43,9 +44,10 @@ func TestEncoder(t *testing.T) {
 		}
 		// Test that an encoder can be created from the single letter
 		// prefix
-		_, err = EncoderByName(str[0:1])
+		r, _ := utf8.DecodeRuneInString(str)
+		_, err = EncoderByName(string(r))
 		if err != nil {
-			t.Fatalf("EncoderByName(%s) failed: %v", str[0:1], err)
+			t.Fatalf("EncoderByName(%s) failed: %v", string(r), err)
 		}
 	}
 }

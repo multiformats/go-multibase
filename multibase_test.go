@@ -44,6 +44,7 @@ var encodedSamples = map[Encoding]string{
 	Base64url:         "uRGVjZW50cmFsaXplIGV2ZXJ5dGhpbmchISE",
 	Base64pad:         "MRGVjZW50cmFsaXplIGV2ZXJ5dGhpbmchISE=",
 	Base64urlPad:      "URGVjZW50cmFsaXplIGV2ZXJ5dGhpbmchISE=",
+	Base256Emoji:      "🚀💛✋💃✋😻😈🥺🤤🍀🌟💐✋😅✋💦✋🥺🏃😈😴🌟😻😝👏👏👏",
 }
 
 func testEncode(t *testing.T, encoding Encoding, bytes []byte, expected string) {

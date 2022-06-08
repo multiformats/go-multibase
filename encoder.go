@@ -2,6 +2,7 @@ package multibase
 
 import (
 	"fmt"
+	"unicode/utf8"
 )
 
 // Encoder is a multibase encoding that is verified to be supported and
@@ -36,8 +37,9 @@ func EncoderByName(str string) (Encoder, error) {
 	var ok bool
 	if len(str) == 0 {
 		return Encoder{-1}, fmt.Errorf("empty multibase encoding")
-	} else if len(str) == 1 {
-		base = Encoding(str[0])
+	} else if utf8.RuneCountInString(str) == 1 {
+		r, _ := utf8.DecodeRuneInString(str)
+		base = Encoding(r)
 		_, ok = EncodingToStr[base]
 	} else {
 		base, ok = Encodings[str]
