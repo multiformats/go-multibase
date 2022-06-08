@@ -145,3 +145,36 @@ func TestSpecVectors(t *testing.T) {
 		})
 	}
 }
+
+func FuzzDecode(f *testing.F) {
+	files, err := filepath.Glob("spec/tests/*.csv")
+	if err != nil {
+		f.Fatal(err)
+	}
+	for _, fname := range files {
+		func() {
+			file, err := os.Open(fname)
+			if err != nil {
+				f.Fatal(err)
+			}
+			defer file.Close()
+			reader := csv.NewReader(file)
+			reader.LazyQuotes = false
+			reader.FieldsPerRecord = 2
+			reader.TrimLeadingSpace = true
+
+			values, err := reader.ReadAll()
+			if err != nil {
+				f.Fatal(err)
+			}
+
+			for _, tc := range values[1:] {
+				f.Add(tc[1])
+			}
+		}()
+	}
+
+	f.Fuzz(func(_ *testing.T, data string) {
+		Decode(data)
+	})
+}
