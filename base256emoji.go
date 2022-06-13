@@ -11,7 +11,8 @@ var base256emojiTable = [256]rune{
 	'🚀', '🪐', '☄', '🛰', '🌌', // Space
 	'🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘', // Moon
 	'🌍', '🌏', '🌎', // Our Home, for now (earth)
-	'☉', '☀', // Our Garden, for now (sol)
+	'🐉',                // Dragon!!!
+	'☀',                // Our Garden, for now (sol)
 	'💻', '🖥', '💾', '💿', // Computer
 	// The rest is completed from https://home.unicode.org/emoji/emoji-frequency/ at the time of creation (december 2021) (the data is from 2019), most used first until we reach 256.
 	// We exclude modifier based emojies (such as flags) as they are bigger than one single codepoint.
