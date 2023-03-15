@@ -2,7 +2,7 @@ package multibase
 
 import (
 	"bytes"
-	"math/rand"
+	"crypto/rand"
 	"sort"
 	"testing"
 )
