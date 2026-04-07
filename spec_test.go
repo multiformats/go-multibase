@@ -7,7 +7,6 @@ import (
 	"strconv"
 	"strings"
 	"testing"
-	"unicode/utf8"
 )
 
 func TestSpec(t *testing.T) {
@@ -19,49 +18,45 @@ func TestSpec(t *testing.T) {
 
 	reader := csv.NewReader(file)
 	reader.LazyQuotes = false
-	reader.FieldsPerRecord = 4
+	reader.FieldsPerRecord = 5
 	reader.TrimLeadingSpace = true
 
 	values, err := reader.ReadAll()
 	if err != nil {
 		t.Error(err)
 	}
-	expectedEncodings := make(map[Encoding]string, len(values)-1)
+	specEncodings := make(map[Encoding]string, len(values)-1)
 	for _, v := range values[1:] {
-		encoding := v[0]
-		codeStr := v[1]
+		unicodeStr := v[0] // e.g. "U+007A"
+		encoding := v[2]
 
 		var code Encoding
-		if strings.HasPrefix(codeStr, "0x") {
-			i, err := strconv.ParseUint(codeStr[2:], 16, 64)
-			if err != nil {
-				t.Errorf("invalid multibase byte %q", codeStr)
-				continue
-			}
-			code = Encoding(i)
-		} else {
-			codeRune, length := utf8.DecodeRuneInString(codeStr)
-			if code == utf8.RuneError {
-				t.Errorf("multibase %q wasn't valid utf8", codeStr)
-				continue
-			}
-			if length != len(codeStr) {
-				t.Errorf("multibase %q wasn't a single character", codeStr)
-				continue
-			}
-			code = Encoding(codeRune)
+		if !strings.HasPrefix(unicodeStr, "U+") {
+			t.Errorf("unexpected unicode format %q", unicodeStr)
+			continue
 		}
-		expectedEncodings[code] = encoding
+		i, err := strconv.ParseUint(unicodeStr[2:], 16, 64)
+		if err != nil {
+			t.Errorf("invalid unicode codepoint %q", unicodeStr)
+			continue
+		}
+		code = Encoding(i)
+		specEncodings[code] = encoding
 	}
 
 	for name, enc := range Encodings {
-		expectedName, ok := expectedEncodings[enc]
+		specName, ok := specEncodings[enc]
 		if !ok {
 			t.Errorf("encoding %q (%c) not defined in the spec", name, enc)
 			continue
 		}
-		if expectedName != name {
-			t.Errorf("encoding %q (%c) has unexpected name %q", expectedName, enc, name)
+		// The spec marks some code points as "none"/reserved that
+		// go-multibase implements (e.g. identity at 0x00).
+		if specName == "none" {
+			continue
+		}
+		if specName != name {
+			t.Errorf("encoding %q (%c) has unexpected name %q", specName, enc, name)
 		}
 	}
 }
