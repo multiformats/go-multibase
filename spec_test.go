@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 	"testing"
+	"unicode"
 )
 
 func TestSpec(t *testing.T) {
@@ -23,11 +24,12 @@ func TestSpec(t *testing.T) {
 
 	values, err := reader.ReadAll()
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 	specEncodings := make(map[Encoding]string, len(values)-1)
 	for _, v := range values[1:] {
 		unicodeStr := v[0] // e.g. "U+007A"
+		character := v[1]
 		encoding := v[2]
 
 		var code Encoding
@@ -41,6 +43,14 @@ func TestSpec(t *testing.T) {
 			continue
 		}
 		code = Encoding(i)
+
+		// Verify the character column matches the Unicode codepoint.
+		// Control characters use names (e.g. "NUL") instead of literals.
+		r := rune(code)
+		if !unicode.IsControl(r) && character != string(r) {
+			t.Errorf("%s: character column %q does not match codepoint %q", unicodeStr, character, string(r))
+		}
+
 		specEncodings[code] = encoding
 	}
 
