@@ -33,6 +33,7 @@ const (
 	Base32hexPadUpper = 'T'
 	Base36            = 'k'
 	Base36Upper       = 'K'
+	Base45            = 'R'
 	Base58BTC         = 'z'
 	Base58Flickr      = 'Z'
 	Base64            = 'm'
