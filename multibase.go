@@ -166,12 +166,21 @@ func Decode(data string) (Encoding, []byte, error) {
 		bytes, err := b32.HexEncoding.DecodeString(data[1:])
 		return enc, bytes, err
 	case Base36, Base36Upper:
+		if len(data) == 1 {
+			return enc, []byte{}, nil
+		}
 		bytes, err := b36.DecodeString(data[1:])
 		return enc, bytes, err
 	case Base58BTC:
+		if len(data) == 1 {
+			return Base58BTC, []byte{}, nil
+		}
 		bytes, err := b58.DecodeAlphabet(data[1:], b58.BTCAlphabet)
 		return Base58BTC, bytes, err
 	case Base58Flickr:
+		if len(data) == 1 {
+			return Base58Flickr, []byte{}, nil
+		}
 		bytes, err := b58.DecodeAlphabet(data[1:], b58.FlickrAlphabet)
 		return Base58Flickr, bytes, err
 	case Base64pad:
